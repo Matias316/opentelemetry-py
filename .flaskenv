@@ -1,4 +1,4 @@
-FLASK_APP=app.api:app
+FLASK_APP=app.app:app
 FLASK_ENV=development
 FLASK_DEBUG=0
 FLASK_RUN_PORT=8080

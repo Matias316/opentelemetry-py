@@ -10,7 +10,8 @@ requires-python = ">=3.13"
 dependencies = [
     "flask (>=3.1.1,<4.0.0)",
     "opentelemetry-distro (>=0.54b1,<0.55)",
-    "python-dotenv (>=1.1.0,<2.0.0)"
+    "python-dotenv (>=1.1.0,<2.0.0)",
+    "gunicorn (>=23.0.0,<24.0.0)"
 ]
 
 
