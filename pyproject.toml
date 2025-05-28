@@ -1,23 +1,22 @@
-[project]
+[tool.poetry]
 name = "opentelemetry-py"
 version = "0.1.0"
 description = "Playing with opentelemetry in python"
-authors = [
-    {name = "Your Name",email = "you@example.com"}
-]
+authors = ["Matias316 <you@example.com>"]
 readme = "README.md"
-requires-python = ">=3.13"
-dependencies = [
-    "flask (>=3.1.1,<4.0.0)",
-    "opentelemetry-distro (>=0.54b1,<0.55)",
-    "python-dotenv (>=1.1.0,<2.0.0)",
-    "gunicorn (>=23.0.0,<24.0.0)"
-]
+packages = [{ include = "app" }]
 
+[tool.poetry.dependencies]
+python = ">=3.11"
+flask = ">=3.1.1,<4.0.0"
+opentelemetry-distro = ">=0.54b1,<0.55"
+opentelemetry-instrumentation = "^0.54b0"
+opentelemetry-exporter-otlp = "^1.24.0"
+opentelemetry-sdk = "^1.24.0"
+opentelemetry-instrumentation-flask = "^0.54b0"
+python-dotenv = ">=1.1.0,<2.0.0"
+gunicorn = ">=23.0.0,<24.0.0"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry]
-package-mode = false
