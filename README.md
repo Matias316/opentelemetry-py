@@ -89,3 +89,20 @@ opentelemetry-py/
 - Infrastructure: Docker, Kubernetes
 - CI/CD: ArgoCD, GitHub Actions or Google Cloud Build
 - Load Testing: k6, Locust
+
+## How to Build and Run
+
+This project includes both a Flask app instrumented with OpenTelemetry and an OpenTelemetry Collector configured to receive and export telemetry data.
+
+### Using Docker Compose (Recommended)
+
+To build and run both services:
+
+```bash
+docker-compose up --build
+```
+This will:
+
+- Build the Flask application container
+- Start both flask-app and otel-collector services
+- Bind the Flask app to http://localhost:8080
