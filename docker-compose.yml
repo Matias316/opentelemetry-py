@@ -11,11 +11,11 @@ services:
     image: otel/opentelemetry-collector:latest
     container_name: otel-collector
     volumes:
-      - ./telemetry/collector-config.yaml:/etc/otelcol/config.yaml
+      - ./telemetry/collector-config.yaml:/etc/otelcol/collector-config.yaml
     ports:
       - "4317:4317"  # OTLP gRPC
       - "4318:4318"  # OTLP HTTP
     command:
-      ["--config=/etc/otelcol/config.yaml"]
+      ["--config=/etc/otelcol/collector-config.yaml"]
 
 

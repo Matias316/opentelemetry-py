@@ -1,0 +1,19 @@
+apiVersion: v1
+data:
+  collector-config.yaml: "receivers:\r\n  otlp:\r\n    protocols:\r\n      grpc:\r\n
+    \       endpoint: 0.0.0.0:4317\r\n      http:\r\n        endpoint: 0.0.0.0:4318\r\nexporters:\r\n
+    \ debug:\r\n    verbosity: detailed\r\nprocessors:\r\n  batch:\r\nservice:\r\n
+    \ pipelines:\r\n    traces:\r\n      receivers: [otlp]\r\n      exporters: [debug]\r\n
+    \     processors: [batch]\r\n    metrics:\r\n      receivers: [otlp]\r\n      exporters:
+    [debug]\r\n      processors: [batch]\r\n    logs:\r\n      receivers: [otlp]\r\n
+    \     exporters: [debug]\r\n      processors: [batch]\r\n"
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"collector-config.yaml":"receivers:\r\n  otlp:\r\n    protocols:\r\n      grpc:\r\n        endpoint: 0.0.0.0:4317\r\n      http:\r\n        endpoint: 0.0.0.0:4318\r\nexporters:\r\n  debug:\r\n    verbosity: detailed\r\nprocessors:\r\n  batch:\r\nservice:\r\n  pipelines:\r\n    traces:\r\n      receivers: [otlp]\r\n      exporters: [debug]\r\n      processors: [batch]\r\n    metrics:\r\n      receivers: [otlp]\r\n      exporters: [debug]\r\n      processors: [batch]\r\n    logs:\r\n      receivers: [otlp]\r\n      exporters: [debug]\r\n      processors: [batch]\r\n"},"kind":"ConfigMap","metadata":{"annotations":{},"creationTimestamp":"2025-05-29T14:44:37Z","name":"collector-config","namespace":"default","resourceVersion":"5625","uid":"b7185944-ab78-42e3-b521-8ccab80444a6"}}
+  creationTimestamp: "2025-05-29T14:44:37Z"
+  name: collector-config
+  namespace: default
+  resourceVersion: "6162"
+  uid: b7185944-ab78-42e3-b521-8ccab80444a6

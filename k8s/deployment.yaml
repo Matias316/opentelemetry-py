@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: opentelemetry-py-webserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opentelemetry-py
+  template:
+    metadata:
+      labels:
+        app: opentelemetry-py
+    spec:
+      containers:
+      - name: flask-app
+        image: opentelemetry-py:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
