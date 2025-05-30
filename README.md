@@ -94,9 +94,9 @@ opentelemetry-py/
 
 This project includes both a Flask app instrumented with OpenTelemetry and an OpenTelemetry Collector configured to receive and export telemetry data.
 
-### Using Docker Compose (Recommended)
+### Using Docker Compose 
 
-To build and run both services:
+To build and run both services in local docker:
 
 ```bash
 docker-compose up --build
@@ -106,3 +106,45 @@ This will:
 - Build the Flask application container
 - Start both flask-app and otel-collector services
 - Bind the Flask app to http://localhost:8080
+
+### Using minikube 
+
+To build and run the services with Minikube:
+
+```bash
+minikube start
+```
+
+Then deploy Kubernetes manifests under k8s folder.
+
+
+```bash
+kubectl apply -f <yaml_file>
+```
+
+To access the services:
+
+```bash
+minikube service opentelemetry-py-svc
+minikube service otel-collector
+```
+### Deploying via Argo CD 
+If Argo CD is already installed, publish the application using:
+
+```bash
+kubectl apply -f ci/argocd.yaml
+```
+
+To access the Argo CD UI locally):
+
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8090:443
+```
+
+Then log in:
+
+```bash
+argocd login localhost:8090 --username admin --password <password> --insecure
+```
+
+ 
