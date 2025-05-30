@@ -115,8 +115,7 @@ To build and run the services with Minikube:
 minikube start
 ```
 
-Then deploy Kubernetes manifests under k8s folder.
-
+Then deploy Kubernetes manifests under k8s folder (using default namespace).
 
 ```bash
 kubectl apply -f <yaml_file>
@@ -125,9 +124,15 @@ kubectl apply -f <yaml_file>
 To access the services:
 
 ```bash
-minikube service opentelemetry-py-svc
-minikube service otel-collector
+kubectl port-forward svc/opentelemetry-py-svc 8080:8080
+kubectl port-forward svc/otel-collector 8889:8889
 ```
+To verify traces, metrics and logs are being received by otel-collector
+
+```bash
+kubectl logs deployment/otel-collector -f 
+```
+
 ### Deploying via Argo CD 
 If Argo CD is already installed, publish the application using:
 
@@ -135,7 +140,7 @@ If Argo CD is already installed, publish the application using:
 kubectl apply -f ci/argocd.yaml
 ```
 
-To access the Argo CD UI locally):
+To access the Argo CD UI locally:
 
 ```bash
 kubectl port-forward svc/argocd-server -n argocd 8090:443
@@ -147,4 +152,19 @@ Then log in:
 argocd login localhost:8090 --username admin --password <password> --insecure
 ```
 
- 
+## Scrape otel-collector with Prometheus and visualization with Grafana
+
+Create a serviceMonitor to scrape OpenTelemetry Collector:
+```bash
+kubectl apply -f k8s/otel-collector-monitor.yaml
+```
+
+Start grafana using:
+```bash
+ kubectl port-forward svc/prometheus-grafana -n monitoring 3000:80
+```
+
+Start prometheus using:
+```bash
+kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n monitoring 9090:9090
+```

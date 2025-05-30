@@ -21,7 +21,8 @@ spec:
             mountPath: /etc/otelcol/
         ports:
           - containerPort: 4317   # gRPC OTLP receiver
-          - containerPort: 55681  # HTTP OTLP receiver
+          - containerPort: 4318  # HTTP OTLP receiver
+          - containerPort: 8889  # Prometheus metrics exporter
       volumes:
         - name: config-volume
           configMap:

@@ -2,6 +2,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: otel-collector
+  namespace: default
+  labels:
+    app: otel-collector
+    release: prometheus
 spec:
   selector:
     app: otel-collector
@@ -12,6 +16,9 @@ spec:
       targetPort: 4317
     - name: otlp-http
       protocol: TCP
-      port: 55681
-      targetPort: 55681
+      port: 4318
+      targetPort: 4318
+    - name: prometheus
+      port: 8889
+      targetPort: 8889
   type: ClusterIP
