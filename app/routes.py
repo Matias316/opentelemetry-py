@@ -1,4 +1,5 @@
 from random import randint
+from flask import jsonify
 
 def register_routes(app, logger, tracer, meter):
 
@@ -23,3 +24,15 @@ def register_routes(app, logger, tracer, meter):
 
     def get_random_int():
         return randint(0,10)
+    
+
+    @app.route("/health/ready")
+    def readiness():
+        # Check dependencies connectivity
+        data = {"status" : "ready"}
+        return jsonify(data), 200
+    
+    @app.route("/health/live")
+    def liveness():
+        data = {"status" : "alive"}
+        return jsonify(data), 200
