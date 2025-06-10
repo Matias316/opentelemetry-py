@@ -115,6 +115,11 @@ To build and run the services with Minikube:
 minikube start
 ```
 
+To enable a dashboard for better visibility:
+```bash
+minikube dashboard
+```
+
 Then deploy Kubernetes manifests under k8s folder (using default namespace).
 
 ```bash
@@ -153,6 +158,16 @@ argocd login localhost:8090 --username admin --password <password> --insecure
 ```
 
 ## Scrape otel-collector with Prometheus and visualization with Grafana
+
+Install prometheus-community chart
+
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm repo update
+
+helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+  --namespace monitoring --create-namespace
+```
 
 Create a serviceMonitor to scrape OpenTelemetry Collector:
 ```bash
