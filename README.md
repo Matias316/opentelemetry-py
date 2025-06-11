@@ -127,7 +127,7 @@ minikube dashboard
 Then deploy Kubernetes manifests under k8s/base folder using default namespace:
 
 ```bash
-kubectl apply -f <yaml_file>
+kubectl apply -f k8/base/
 ````
 
 To access local services:
@@ -185,7 +185,7 @@ Try access: https://opentelemetry-py.<MINIKUBE_IP>.nip.io
 If Argo CD is already installed, publish the application using:
 
 ```bash
-kubectl apply -f ci/argocd.yaml
+kubectl apply -f ci/
 ````
 
 To access the Argo CD UI locally:
@@ -214,7 +214,7 @@ helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
 
 Create a serviceMonitor to scrape OpenTelemetry Collector:
 ```bash
-kubectl apply -f k8s/otel-collector-monitor.yaml
+kubectl apply -f k8s/monitor/otel-collector-monitor.yaml
 ````
 
 Start grafana using:
