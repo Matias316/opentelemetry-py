@@ -86,7 +86,7 @@ opentelemetry-py/
 
 - Language: Python (Flask)
 - Observability: OpenTelemetry SDK, Jaeger, Prometheus, Grafana
-- Infrastructure: Docker, Kubernetes
+- Infrastructure: Docker, Kubernetes (minikube)
 - CI/CD: ArgoCD, GitHub Actions or Google Cloud Build
 - Load Testing: k6, Locust
 
@@ -100,7 +100,8 @@ To build and run both services in local docker:
 
 ```bash
 docker-compose up --build
-```
+````
+
 This will:
 
 - Build the Flask application container
@@ -109,53 +110,95 @@ This will:
 
 ### Using minikube 
 
-To build and run the services with Minikube:
+To build and run the services within Minikube:
 
 ```bash
+eval $(minikube docker-env)
 minikube start
-```
+docker build -t opentelemetry-py:latest . #Now you can build image and it will go into minikube registry
+````
 
 To enable a dashboard for better visibility:
+
 ```bash
 minikube dashboard
-```
+````
 
-Then deploy Kubernetes manifests under k8s folder (using default namespace).
+Then deploy Kubernetes manifests under k8s/base folder using default namespace:
 
 ```bash
 kubectl apply -f <yaml_file>
-```
+````
 
-To access the services:
+To access local services:
 
 ```bash
 kubectl port-forward svc/opentelemetry-py-svc 8080:8080
 kubectl port-forward svc/otel-collector 8889:8889
-```
-To verify traces, metrics and logs are being received by otel-collector
+````
+
+Finally access: http://localhost:8080
+
+## How to secure the app for external traffic
+
+Install cert-manager:
 
 ```bash
-kubectl logs deployment/otel-collector -f 
-```
+cd k8s/tls
+bash cert-manager-installation.bash
+````
+
+Install NGINX Ingress Controller ( reverse proxy and load balancer):
+
+```bash
+minikube addons enable ingress
+kubectl get svc -n ingress-nginx
+````
+
+Create ClusterIssuer for Let's Encrypt:
+
+```bash
+cd k8s/tls
+
+# Remember to update script with your email before running
+bash lets-encrypt-email-replacement.bash
+````
+
+Update webserver-ingress.yaml with minikube IP and apply changes:
+
+```bash
+cd k8s/base
+
+# Remember to update script with your email before running
+bash update-hostname-using-minikube-ip.bash
+````
+
+Finally, create a tunnel to expose Load Balancer IP:
+
+```bash
+minikube tunnel
+````
+
+Try access: https://opentelemetry-py.<MINIKUBE_IP>.nip.io
 
 ### Deploying via Argo CD 
 If Argo CD is already installed, publish the application using:
 
 ```bash
 kubectl apply -f ci/argocd.yaml
-```
+````
 
 To access the Argo CD UI locally:
 
 ```bash
 kubectl port-forward svc/argocd-server -n argocd 8090:443
-```
+````
 
 Then log in:
 
 ```bash
 argocd login localhost:8090 --username admin --password <password> --insecure
-```
+````
 
 ## Scrape otel-collector with Prometheus and visualization with Grafana
 
@@ -167,19 +210,46 @@ helm repo update
 
 helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
   --namespace monitoring --create-namespace
-```
+````
 
 Create a serviceMonitor to scrape OpenTelemetry Collector:
 ```bash
 kubectl apply -f k8s/otel-collector-monitor.yaml
-```
+````
 
 Start grafana using:
 ```bash
- kubectl port-forward svc/prometheus-grafana -n monitoring 3000:80
-```
+kubectl port-forward svc/prometheus-grafana -n monitoring 3000:80
+````
 
 Start prometheus using:
 ```bash
 kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n monitoring 9090:9090
-```
+````
+
+
+## Troubleshooting and monitoring
+
+To verify traces, metrics and logs are being received by otel-collector:
+
+```bash
+kubectl logs deployment/otel-collector -f 
+````
+
+To analize issues with certificates and challenges:
+
+```bash
+kubectl get certificates
+kubectl describe certificate flask-tls
+
+kubectl get orders
+kubectl describe order <name>
+
+kubectl get challenges
+kubectl describe challenge <name>
+
+kubectl get certificaterequests
+kubectl describe certificaterequest <name>
+
+kubectl logs -n cert-manager -l app.kubernetes.io/name=cert-manager --follow
+````

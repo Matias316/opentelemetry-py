@@ -6,6 +6,10 @@ def register_routes(app, logger, tracer, meter):
     # Create a counter instrument
     random_value_counter = meter.create_counter("random_group.values", description="The number of ocurrences by random value")
 
+    @app.route("/")
+    def home():
+        return "Opentelemetry-py home page!"
+
     @app.route("/log-based-on-random-int")
     def log_based_on_random_int():
         # Create a new span that will be child of current one
