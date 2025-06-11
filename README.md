@@ -219,14 +219,17 @@ kubectl apply -f k8s/monitor/otel-collector-monitor.yaml
 
 Start grafana using:
 ```bash
-kubectl port-forward svc/prometheus-grafana -n monitoring 3000:80
+kubectl port-forward svc/kube-prometheus-stack-grafana -n monitoring 3000:80
 ````
+
+Access Grafana: http://localhost:3000
 
 Start prometheus using:
 ```bash
-kubectl port-forward svc/prometheus-kube-prometheus-prometheus -n monitoring 9090:9090
+kubectl port-forward svc/kube-prometheus-stack-prometheus -n monitoring 9090:9090
 ````
 
+Access Prometheus: http://localhost:9090
 
 ## Troubleshooting and monitoring
 
