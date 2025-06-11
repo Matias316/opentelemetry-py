@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: opentelemetry-py-rb
+  namespace: default
+subjects:
+- kind: ServiceAccount
+  name: opentelemetry-py-sa
+  namespace: default
+roleRef:
+  kind: Role
+  name: opentelemetry-py-role
+  apiGroup: rbac.authorization.k8s.io

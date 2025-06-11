@@ -12,6 +12,7 @@ spec:
       labels:
         app: opentelemetry-py
     spec:
+      serviceAccountName: opentelemetry-py-sa
       containers:
       - name: flask-app
         image: opentelemetry-py:latest
@@ -32,5 +33,4 @@ spec:
           initialDelaySeconds: 3
           periodSeconds: 5
           failureThreshold: 3
-
 
